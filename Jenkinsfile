@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // backend 디렉토리로 이동 후 Docker 이미지 빌드
-                    dir('backend') {
+                    dir('awsb') {
                         sh 'docker build -t $BACKEND_IMAGE .'
                     }
                 }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // frontend 디렉토리로 이동 후 Docker 이미지 빌드
-                    dir('frontend') {
+                    dir('awsc') {
                         sh 'docker build -t $FRONTEND_IMAGE .'
                     }
                 }
