@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Git repository에서 코드 체크아웃
-                git credentialsId: 'git-token', url: 'https://github.com/rjsdn9025/miniProject.git', branch: 'main'
+                git credentialsId: 'github-token', url: 'https://github.com/rjsdn9025/miniProject.git', branch: 'main'
             }
         }
         
