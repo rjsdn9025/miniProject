@@ -97,7 +97,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
         />
       </Form>
       <div style={{ marginTop: "1rem" }}>
-        처음이신 박건우은<Link href="/signup">클릭</Link>
+        처음이신 양혁진은<Link href="/signup">클릭</Link>
       </div>
     </div>
   )
