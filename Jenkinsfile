@@ -15,53 +15,84 @@ pipeline {
             }
         }
         
-        stage('Build Backend Docker Image') {
-            steps {
-                script {
-                    // backend 디렉토리로 이동 후 Docker 이미지 빌드
-                    dir('awsb') {
-                        sh 'docker build -t $BACKEND_IMAGE .'
+        stage('Build and Push Backend Docker Image') {
+            when {
+                expression {
+                    // backend 디렉토리에 변경 사항이 있는지 확인
+                    return sh(script: "git diff --name-only HEAD~1 HEAD | grep '^awsb/'", returnStatus: true) == 0
+                }
+            }
+            stages {
+                stage('Build Backend Docker Image') {
+                    steps {
+                        script {
+                            // backend 디렉토리로 이동 후 Docker 이미지 빌드
+                            dir('awsb') {
+                                sh 'docker build -t $BACKEND_IMAGE .'
+                            }
+                        }
+                    }
+                }
+
+                stage('Login to Docker Hub for Backend') {
+                    steps {
+                        script {
+                            // Docker Hub에 로그인
+                            withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                                sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                            }
+                        }
+                    }
+                }
+
+                stage('Push Backend Docker Image') {
+                    steps {
+                        script {
+                            // Docker Hub에 백엔드 이미지 푸시
+                            sh 'docker push $BACKEND_IMAGE'
+                        }
                     }
                 }
             }
         }
         
-        stage('Build Frontend Docker Image') {
-            steps {
-                script {
-                    // frontend 디렉토리로 이동 후 Docker 이미지 빌드
-                    dir('awsc') {
-                        sh 'docker build -t $FRONTEND_IMAGE .'
+        stage('Build and Push Frontend Docker Image') {
+            when {
+                expression {
+                    // frontend 디렉토리에 변경 사항이 있는지 확인
+                    return sh(script: "git diff --name-only HEAD~1 HEAD | grep '^awsc/'", returnStatus: true) == 0
+                }
+            }
+            stages {
+                stage('Build Frontend Docker Image') {
+                    steps {
+                        script {
+                            // frontend 디렉토리로 이동 후 Docker 이미지 빌드
+                            dir('awsc') {
+                                sh 'docker build -t $FRONTEND_IMAGE .'
+                            }
+                        }
                     }
                 }
-            }
-        }
-        
-        stage('Login to Docker Hub') {
-            steps {
-                script {
-                    // Docker Hub에 로그인
-                    withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+
+                stage('Login to Docker Hub for Frontend') {
+                    steps {
+                        script {
+                            // Docker Hub에 로그인
+                            withCredentials([usernamePassword(credentialsId: "$DOCKER_CREDENTIALS_ID", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                                sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                            }
+                        }
                     }
                 }
-            }
-        }
-        
-        stage('Push Backend Docker Image') {
-            steps {
-                script {
-                    // Docker Hub에 백엔드 이미지 푸시
-                    sh 'docker push $BACKEND_IMAGE'
-                }
-            }
-        }
-        
-        stage('Push Frontend Docker Image') {
-            steps {
-                script {
-                    // Docker Hub에 프론트엔드 이미지 푸시
-                    sh 'docker push $FRONTEND_IMAGE'
+
+                stage('Push Frontend Docker Image') {
+                    steps {
+                        script {
+                            // Docker Hub에 프론트엔드 이미지 푸시
+                            sh 'docker push $FRONTEND_IMAGE'
+                        }
+                    }
                 }
             }
         }
