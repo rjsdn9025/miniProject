@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: rjsdn9025/awsb:latest
+        env:
+        - name: DB_NAME
+          value: "sbcntrapp"
+        - name: DB_HOST
+          value: "sbcntr-db.cluster-czk4yeia2fwr.ap-northeast-2.rds.amazonaws.com"  # 실제 DB 호스트 URL로 변경하세요
+        - name: DB_USERNAME
+          value: "admin"
+        - name: DB_PASSWORD
+          value: "n6*H2~7dz-Kb4SD-(}JAPUSY7|X9"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80         # 외부에 노출할 포트
+      targetPort: 8080 # 컨테이너 내부에서 리스닝하는 포트
+  type: LoadBalancer
