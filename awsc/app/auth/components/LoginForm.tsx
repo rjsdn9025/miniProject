@@ -56,7 +56,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
         로그인
       </Typography>
       <Form
-        submitText="로그인1"
+        submitText="로그인"
         schema={LoginInput}
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
@@ -97,7 +97,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
         />
       </Form>
       <div style={{ marginTop: "1rem" }}>
-        처음이신 분은<Link href="/signup">클릭</Link>
+        처음이신 양혁진은<Link href="/signup">클릭</Link>
       </div>
     </div>
   )
