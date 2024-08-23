@@ -19,9 +19,9 @@ spec:
         image: rjsdn9025/awsc:latest
         env:
         - name: APP_SERVICE_HOST
-          value: "http://aa960370edf524c0ea4d7a10a7f66f1c-151270602.ap-northeast-2.elb.amazonaws.com"
+          value: "http://a4a6c1d52f32f4c078b477c6b7845f2e-1636800644.ap-northeast-2.elb.amazonaws.com"
         - name: NOTIF_SERVICE_HOST
-          value: "http://aa960370edf524c0ea4d7a10a7f66f1c-151270602.ap-northeast-2.elb.amazonaws.com"
+          value: "http://a4a6c1d52f32f4c078b477c6b7845f2e-1636800644.ap-northeast-2.elb.amazonaws.com"
         - name: DB_NAME
           value: "sbcntrapp"
         - name: DB_HOST
