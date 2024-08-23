@@ -40,5 +40,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80         # 외부에 노출할 포트
-      targetPort: 8080 # 컨테이너 내부에서 리스닝하는 포트
+      targetPort: 80 # 컨테이너 내부에서 리스닝하는 포트
   type: LoadBalancer
